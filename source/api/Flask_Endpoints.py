@@ -6,10 +6,12 @@ import time
  
 from flask import jsonify
 from argon2 import PasswordHasher
-from sqlalchemy import select
+from sqlalchemy import select, update
 from source.db.DBManager import DBManager
 from source.db.Usuario import Usuario
 from configparser import ConfigParser
+
+from source.managers.ConfigManager import ConfigManager
 
 def raiz():
     return "<p>HOLA</p>"
@@ -18,6 +20,13 @@ def raiz():
 def protegido():
     return "<p>PROTEGIDO!</p>"
 
+def verificarQueUsuarioExiste(email):
+    db = DBManager.getInstance()
+
+    query = select(Usuario).where(Usuario.email.in_([email]))
+    usuarioDB = db.session.scalar(query)
+
+    return usuarioDB
 
 def login():
     
@@ -30,13 +39,7 @@ def login():
     print(email + " " + pw, file=sys.stdout)
 
     # 1. verificar existencia de usuario
-    db = DBManager.getInstance()
-
-    query = select(Usuario).where(Usuario.email.in_([email]))
-    usuarioDB = None
-
-    for user in db.session.scalar(query):
-        usuarioDB = user
+    usuarioDB = verificarQueUsuarioExiste(email)
 
     if(usuarioDB == None):
         return "USUARIO NO VALIDO", 401
@@ -55,14 +58,14 @@ def login():
     last_date = time.time()
 
     # 5. actualizar BD con entrada de usuario
-    cur = db.connection.cursor()
-    query = "UPDATE users SET token=?, last_date=? WHERE email=?"
-    params = (ph.hash(token), last_date, email)
-    cur.execute(query, params)
-    cur.close()
+    # modificado para usar SQLAlchemy 
+    db = DBManager.getInstance()
+
+    query = update(Usuario).where(Usuario.id == usuarioDB.id).values(token=ph.hash(token), last_date=last_date)
+    db.session.execute(query)
+    db.session.commit()
     
-    config = ConfigParser()
-    config.read('config.ini')
+    cManager = ConfigManager.getInstance()
 
     # si no jaló mostrar error
-    return jsonify(token=token, caducidad=config['SESSION']['TOKEN_LIFESPAN']), 200
+    return jsonify(token=token, caducidad=cManager.config['SESSION']['TOKEN_LIFESPAN']), 200
