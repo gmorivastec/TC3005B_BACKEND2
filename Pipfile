@@ -10,6 +10,7 @@ argon2-cffi = "*"
 flask-login = "*"
 psycopg2 = "*"
 flask_cors = "*"
+sqlalchemy = "*"
 
 [dev-packages]
 
