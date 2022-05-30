@@ -47,19 +47,19 @@ login_manager.request_loader(request_loader)
 
 # en este archivos hacemos link entre ruta - lógica
 app.add_url_rule("/", view_func=raiz)
-app.add_url_rule("/protected", view_func=protegido)
-app.add_url_rule("/login", view_func=login, methods=['POST'])
+#app.add_url_rule("/protected", view_func=protegido)
+#app.add_url_rule("/login", view_func=login, methods=['POST'])
 
 
 # cuando haces un singleton todos estos son la misma instancia
-db = DBManager.getInstance()
-db2 = DBManager.getInstance()
-db3 = DBManager.getInstance()
+#db = DBManager.getInstance()
+#db2 = DBManager.getInstance()
+#db3 = DBManager.getInstance()
 
 # hagamos un query sencillo 
-stmt = select(Usuario)
-for user in db.session.scalars(stmt):
-    print(user.email)
-    print(user.PASSWORD)
-    print(user.token)
-    print("")
+#stmt = select(Usuario)
+#for user in db.session.scalars(stmt):
+#    print(user.email)
+#    print(user.password)
+#    print(user.token)
+#    print("")

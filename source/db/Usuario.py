@@ -14,6 +14,6 @@ class Usuario(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
     email = Column(String(150))
-    PASSWORD = Column(String(100))
+    password = Column(String(100))
     token = Column(String(100))
     last_date = Column(Integer)
