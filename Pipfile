@@ -9,6 +9,7 @@ gunicorn = "*"
 argon2-cffi = "*"
 flask-login = "*"
 psycopg2 = "*"
+flask_cors = "*"
 
 [dev-packages]
 
