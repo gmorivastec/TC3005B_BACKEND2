@@ -52,14 +52,14 @@ app.add_url_rule("/", view_func=raiz)
 
 
 # cuando haces un singleton todos estos son la misma instancia
-#db = DBManager.getInstance()
-#db2 = DBManager.getInstance()
-#db3 = DBManager.getInstance()
+db = DBManager.getInstance()
+db2 = DBManager.getInstance()
+db3 = DBManager.getInstance()
 
 # hagamos un query sencillo 
-#stmt = select(Usuario)
-#for user in db.session.scalars(stmt):
-#    print(user.email)
-#    print(user.password)
-#    print(user.token)
-#    print("")
+stmt = select(Usuario)
+for user in db.session.scalars(stmt):
+    print(user.email)
+    print(user.password)
+    print(user.token)
+    print("")
